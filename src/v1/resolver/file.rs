@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use super::underline::{Underline, UnderlineParseError};
 use std::collections::HashSet;
