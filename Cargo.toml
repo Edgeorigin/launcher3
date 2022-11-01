@@ -12,3 +12,4 @@ serde = { version = "1", features = ["derive"] }
 semver = { version = "1", features = ["serde"] }
 sevenz-rust = "0.1.4"
 tokio = { version = "1", features = ["full"] }
+platforms = { version = "3.0.1", features = ["serde"] }
