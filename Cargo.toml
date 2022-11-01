@@ -6,3 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+thiserror = "1"
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+semver = { version = "1", features = ["serde"] }
+sevenz-rust = "0.1.4"
+tokio = { version = "1", features = ["full"] }
