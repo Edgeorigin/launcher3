@@ -50,6 +50,12 @@ pub struct Underline {
     category: Option<String>,
 }
 
+impl Underline {
+    pub fn uid(&self) -> &str {
+        &blake3::hash(self.to_id().as_bytes()).to_hex()
+    }
+}
+
 impl std::fmt::Display for Underline {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.to_id())

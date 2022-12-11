@@ -1,4 +1,4 @@
 pub mod underline;
-pub mod file;
+pub mod package;
 
 pub use underline::PluginId;

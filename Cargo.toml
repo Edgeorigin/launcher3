@@ -10,6 +10,10 @@ thiserror = "1"
 anyhow = "1"
 serde = { version = "1", features = ["derive"] }
 semver = { version = "1", features = ["serde"] }
-sevenz-rust = "0.1.4"
 tokio = { version = "1", features = ["full"] }
 platforms = { version = "3.0.1", features = ["serde"] }
+sysinfo = "0.27.0"
+dunce = "1.0.3"
+blake3 = { version = "1.3.3", features = ["rayon"] }
+memmap2 = "0.5.7"
+rayon = "1.5.3"

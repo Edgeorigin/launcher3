@@ -1,14 +1,19 @@
 pub mod v1;
 pub mod shared;
 
-use crate::v1::resolver::file::FileId;
+use std::path::PathBuf;
+use std::str::FromStr;
+
+use crate::v1::discovery::profile::Profile;
+
+use crate::shared::archive::extract_async;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
-    // 将 str 解析为 FileId
-    let id = r#".\VLC_3.0.17.4_Cno（bot）.7z"#.parse::<FileId>()?;
+    let pkgs = Profile::parse_all().first().expect("not found profile").scan_packages(None)?;
+    println!("{:#?}", pkgs);
 
-    println!("{:#?}", id);
+    extract_async(PathBuf::from("./VLC_3.0.17.4_Cno（bot）.7z").canonicalize()?, PathBuf::from("./test_output")).await?;
 
     Ok(())
 }

@@ -9,7 +9,7 @@ use std::str::FromStr;
 pub const DEFAULT_EXT: &'static str = "7z";
 
 #[derive(Debug, Clone, thiserror::Error)]
-pub enum FileIdParseError {
+pub enum PackageIdParseError {
     #[error("path is not file")]
     NotFile,
 
@@ -21,56 +21,56 @@ pub enum FileIdParseError {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FileId {
+pub struct PackageId {
     path: PathBuf,
     id: Underline,
     flags: HashSet<char>,
     ext: String,
 }
 
-impl FromStr for FileId {
-    type Err = FileIdParseError;
+impl FromStr for PackageId {
+    type Err = PackageIdParseError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::parse(s, None)
     }
 }
 
-impl From<&Path> for FileId {
+impl From<&Path> for PackageId {
     fn from(p: &Path) -> Self {
         Self::parse(p, None).unwrap()
     }
 }
 
-impl From<PathBuf> for FileId {
+impl From<PathBuf> for PackageId {
     fn from(p: PathBuf) -> Self {
         Self::parse(p, None).unwrap()
     }
 }
 
-impl From<String> for FileId {
+impl From<String> for PackageId {
     fn from(p: String) -> Self {
         Self::parse(p, None).unwrap()
     }
 }
 
-impl FileId {
-    pub fn parse<P: AsRef<Path>>(p: P, e: Option<&str>) -> Result<Self, FileIdParseError> {
+impl PackageId {
+    pub fn parse<P: AsRef<Path>>(p: P, e: Option<&str>) -> Result<Self, PackageIdParseError> {
         let p = p.as_ref().to_path_buf();
         let e = e.unwrap_or(DEFAULT_EXT);
 
         let u = p
             .file_stem()
-            .ok_or(FileIdParseError::NotFile)?
+            .ok_or(PackageIdParseError::NotFile)?
             .to_string_lossy()
             .parse::<Underline>()
-            .map_err(FileIdParseError::InvalidFilename)?;
+            .map_err(PackageIdParseError::InvalidFilename)?;
 
         let f = p
             .extension()
-            .ok_or(FileIdParseError::InvalidExt)?
+            .ok_or(PackageIdParseError::InvalidExt)?
             .to_string_lossy()
             .strip_prefix(e)
-            .ok_or(FileIdParseError::InvalidExt)?
+            .ok_or(PackageIdParseError::InvalidExt)?
             .chars()
             .collect::<HashSet<_>>();
 
@@ -83,7 +83,7 @@ impl FileId {
     }
 }
 
-impl Deref for FileId {
+impl Deref for PackageId {
     type Target = Path;
 
     fn deref(&self) -> &Self::Target {
@@ -91,13 +91,13 @@ impl Deref for FileId {
     }
 }
 
-impl AsRef<Path> for FileId {
+impl AsRef<Path> for PackageId {
     fn as_ref(&self) -> &Path {
         &self.path
     }
 }
 
-impl FileId {
+impl PackageId {
     pub fn path(&self) -> &Path {
         &self.path
     }
