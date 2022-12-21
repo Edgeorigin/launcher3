@@ -1,3 +1,3 @@
-mod device;
+pub mod device;
 pub mod profile;
 pub mod core;

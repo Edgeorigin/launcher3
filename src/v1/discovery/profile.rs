@@ -1,8 +1,5 @@
 use serde::{Serialize, Deserialize};
-use sysinfo::{System, SystemExt};
-
 use crate::v1::resolver::package::PackageId;
-
 use super::device::{ProfileRawDescriptor, get_disk_descriptors, scan_profile};
 pub use super::device::DiskDescriptor;
 
@@ -12,15 +9,10 @@ pub struct Profile {
 }
 
 impl Profile {
-  pub fn fetch_disks() -> Vec<DiskDescriptor> {
-    let mut sys = System::new();
-    get_disk_descriptors(&mut sys)
-  }
-
-  pub fn parse_all() -> Vec<Profile> {
-    Self::fetch_disks().iter().filter_map(
+  pub fn parse_all() -> Result<Vec<Profile>, anyhow::Error> {
+    Ok(get_disk_descriptors()?.iter().filter_map(
       |v| Self::parse(v.to_owned())
-    ).collect()
+    ).collect())
   }
 
   pub fn parse(root: DiskDescriptor) -> Option<Profile> {
@@ -33,12 +25,12 @@ impl Profile {
 }
 
 impl Profile {
-  pub fn scan_packages(&self, prefix: Option<&str>) -> Result<Vec<PackageId>, anyhow::Error> {
+  pub fn scan_packages(&self, extension: Option<&str>) -> Result<Vec<PackageId>, anyhow::Error> {
     let mut p = vec![];
     for i in self.descriptor.pkgs.read_dir()? {
       match i {
         Ok(i) if i.metadata()?.is_file() => {
-          if let Ok(i) = PackageId::parse(i.path(), prefix) {
+          if let Ok(i) = PackageId::parse(i.path(), extension) {
             p.push(i)
           }
         },

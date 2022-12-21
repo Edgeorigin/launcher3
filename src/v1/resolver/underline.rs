@@ -51,8 +51,8 @@ pub struct Underline {
 }
 
 impl Underline {
-    pub fn uid(&self) -> &str {
-        &blake3::hash(self.to_id().as_bytes()).to_hex()
+    pub fn uid(&self) -> String {
+        blake3::hash(self.to_id().as_bytes()).to_hex().to_string()
     }
 }
 

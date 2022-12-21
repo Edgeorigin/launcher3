@@ -1,0 +1,1 @@
+pub const SCRIPT_HISTORY_DIR: &'static str = "plugin_script_history";
